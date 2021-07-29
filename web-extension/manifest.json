@@ -1,0 +1,10 @@
+{
+    "manifest_version": 2,
+    "name": "Tabulate by JPlexer",
+    "short_name": "tabulate",
+    "description": "A nice looking New Tab Page.",
+    "version": "1.0.0",
+    "chrome_url_overrides": {
+        "newtab": "newtab.html"
+    }
+}

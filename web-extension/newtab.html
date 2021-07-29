@@ -1,0 +1,210 @@
+<html>
+
+<head>
+    <link href='lato.css' rel='stylesheet' type='text/css'>
+	<script src="./axios.min.js"></script>
+    <script src="https://unpkg.com/i18next@20.3.5/dist/umd/i18next.js"></script>
+    <script src="./i18nextHttpBackend.min.js"></script>
+    <title>New Tab</title>
+    <meta charset="utf-8" />
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        html {
+            min-height: 100%;
+            position: relative;
+        }
+		.aaa {
+			background-color: rgba(0, 0, 0, 0.7);
+			width: 100%;
+            height: 100%;
+		}
+        .bbb {
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            overflow: hidden;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: black;
+            height: 100%;
+            background-image: url(https://source.unsplash.com/1280x720/?nature);
+			background-size: cover;
+			color: white;
+            font-family: Lato;
+            overflow: hidden;
+        }
+
+
+        h1 {
+            font-size: 4vw;
+        }
+        
+		.clock {
+			padding: 30px;
+			font-size: 500%;
+		}
+		.degrees {
+			padding-left: 40px;
+			display: inline-block;
+			position: absolute;
+			font-size: 300%;
+		}
+		.weatherimg {
+			height: 1em;
+			width: auto;
+		}
+
+    </style>
+</head>
+
+<body>
+	<div class="aaa">
+            <span id="Clockk" class="clock" onload="showTime()"></span>
+			<br>
+			<div class="degrees">
+				<img id="weatherimg" class="weatherimg">
+				<span id="degrees"></span>
+			</div>
+		<div class="bbb">
+                <h1 id="message">Hey!</h1>
+		</div>
+            
+        </div>
+	</div>
+</body>
+<script>
+const queryString = window.location.search;
+const urlParams = new URLSearchParams(queryString);
+const namemessage = urlParams.get('name');
+const locationmessage = urlParams.get('loc')
+var lang = urlParams.get("lang")
+if (lang) {} else {lang = "en"}
+i18next
+  .use(window.i18nextHttpBackend)
+  .init({
+    lng: lang,
+        fallbackLng: "en",
+    backend: {
+      loadPath: './translations/{{lng}}/{{ns}}.json'
+    }
+  });
+
+function appendHtml(targetC, htmldata) {
+    var theDiv = document.getElementById(targetC);
+    theDiv.innerHTML = htmldata;
+}
+function checkMessageNotIdentical(target, message) {
+    var htmessage = document.getElementById(target).innerText;
+    if (htmessage === message) {
+        return false;
+    } else {
+        return true
+    }
+}
+
+    function showTime() {
+        var date = new Date();
+        var h = date.getHours(); // 0 - 23
+        var m = date.getMinutes(); // 0 - 59
+
+        h = (h < 10) ? "0" + h : h;
+        m = (m < 10) ? "0" + m : m;
+
+        var time = h + ":" + m + " ";
+        document.getElementById("Clockk").innerText = time;
+        document.getElementById("Clockk").textContent = time;
+
+        setTimeout(showTime, 1000);
+        if(namemessage && namemessage.match(/^[0-9a-zA-Z?&]{1,16}$/)){
+            if(h >= 12 && h < 17) {
+                if (checkMessageNotIdentical("message", i18next.t('Good Afternoon') + ", " + namemessage + "!")){
+                    appendHtml('message', i18next.t('Good Afternoon') + ", " + namemessage + "!");
+                }
+                
+            } else if (h >= 17 && h < 21) {
+                if (checkMessageNotIdentical("message", i18next.t('Good Evening') + ", " + namemessage + "!")){
+                    appendHtml('message', i18next.t('Good Evening') + ", " + namemessage + "!");
+                }
+                
+            } else if (h >= 21 && h <= 23) {
+                if (checkMessageNotIdentical("message", i18next.t('Good Night') + ", " + namemessage + "!")){
+                    appendHtml('message', i18next.t('Good Night') + ", " + namemessage + "!");
+                }
+                
+            } else if (h >= 0 && h < 5) {
+                if (checkMessageNotIdentical("message", i18next.t('Good Night') + ", " + namemessage + "!")){
+                    appendHtml('message', i18next.t('Good Night') + ", " + namemessage + "!");
+                }
+               
+            } else if (h >= 5 && h < 12) {
+                if (checkMessageNotIdentical("message", i18next.t('Good Morning') + ", " + namemessage + "!")){
+                    appendHtml('message', i18next.t('Good Morning') + ", " + namemessage + "!");
+                }
+                
+            }
+     } else {
+        if(h >= 12 && h < 17) {
+                if (checkMessageNotIdentical("message", i18next.t('Good Afternoon') +"!")){
+                    appendHtml('message', i18next.t('Good Afternoon') + "!");
+                }
+                
+            } else if (h >= 17 && h < 21) {
+                if (checkMessageNotIdentical("message",i18next.t('Good Evening') +"!")){
+                    appendHtml('message', i18next.t('Good Evening')+"!");
+                }
+                
+            } else if (h >= 21 && h <= 23) {
+                if (checkMessageNotIdentical("message", i18next.t('Good Night')+"!")){
+                    appendHtml('message', i18next.t('Good Night')+"!");
+                }
+                
+            } else if (h >= 0 && h < 5) {
+                if (checkMessageNotIdentical("message",  i18next.t('Good Night')+"!")){
+                    appendHtml('message',  i18next.t('Good Night')+"!");
+                }
+               
+            } else if (h >= 5 && h < 12) {
+                if (checkMessageNotIdentical("message",  i18next.t('Good Morning')+"!")){
+                    appendHtml('message',  i18next.t('Good Morning')+"!");
+                }
+                
+            }
+     }
+    }
+
+	function getWeather(location) {
+		axios.get(`https://nominatim.openstreetmap.org/search?q=${location}&format=geojson`)
+	.then(function (response) {
+    var coords = response.data.features[0].geometry.coordinates  
+	axios.get(`https://api.met.no/weatherapi/locationforecast/2.0/compact?lat=${coords[1]}&lon=${coords[0]}`)
+	.then(function (response) {
+		var temperature = response.data.properties.timeseries[0].data.instant.details.air_temperature;
+		var weater = response.data.properties.timeseries[0].data.next_1_hours.summary.symbol_code
+	appendHtml('degrees', `${temperature}°`);
+	document.getElementById("weatherimg").src=`./weather/${weater}.svg`;
+  })
+  })
+	}
+	if(locationmessage) {
+		getWeather(locationmessage);
+	}
+	
+	showTime();
+</script>
+
+</html>
